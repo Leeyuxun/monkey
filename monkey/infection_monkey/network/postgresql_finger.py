@@ -1,6 +1,6 @@
 import logging
 
-import psycopg2
+#import psycopg2
 
 from common.common_consts.timeouts import MEDIUM_REQUEST_TIMEOUT
 from infection_monkey.model import ID_STRING

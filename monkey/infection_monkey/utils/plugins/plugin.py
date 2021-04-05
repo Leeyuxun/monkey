@@ -11,7 +11,8 @@ LOG = logging.getLogger(__name__)
 
 def _get_candidate_files(base_package_file):
     files = glob.glob(join(dirname(base_package_file), "*.py"))
-    return [basename(f)[:-3] for f in files if isfile(f) and not f.endswith("__init__.py")]
+    return [basename(f)[:-3] for f in files if isfile(f) and not
+            (f.endswith('__init__.py') or f.startswith('test_'))]
 
 
 PluginType = TypeVar("PluginType", bound="Plugin")
