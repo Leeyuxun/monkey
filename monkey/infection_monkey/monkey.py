@@ -71,6 +71,8 @@ class InfectionMonkey(object):
         if not self._singleton.try_lock():
             raise Exception("Another instance of the monkey is already running")
 
+        InfectionMonkey.change_working_dir()
+
         arg_parser = argparse.ArgumentParser()
         arg_parser.add_argument("-p", "--parent")
         arg_parser.add_argument("-t", "--tunnel")
@@ -102,6 +104,17 @@ class InfectionMonkey(object):
                 LOG.debug(
                     "Default server: %s is already in command servers list" % self._default_server
                 )
+
+    @staticmethod
+    def change_working_dir():
+        # Change the current working directory to be the location of the monkey agent
+        # binary. This is particularly desirable when `data_dir` is set and the agent is
+        # being started from the Island, which is an AppImage. Since AppImages are
+        # read-only filesystems, the agent cannot create any files in `./` unless it has
+        # already changed CWD to a writable directory.
+
+        monkey_bin_parent_dir = os.path.dirname(sys.argv[0])
+        os.chdir(monkey_bin_parent_dir)
 
     def start(self):
         try:
